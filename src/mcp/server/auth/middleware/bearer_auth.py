@@ -18,12 +18,12 @@ class AuthenticatedUser(SimpleUser):
         self.access_token = auth_info
         self.scopes = auth_info.scopes
 
-
+##认证后端
 class BearerAuthBackend(AuthenticationBackend):
     """
     Authentication backend that validates Bearer tokens using a TokenVerifier.
     """
-
+    ##创建时会接收一个TokenVerifier用来对token进行验证
     def __init__(self, token_verifier: TokenVerifier):
         self.token_verifier = token_verifier
 
@@ -34,9 +34,9 @@ class BearerAuthBackend(AuthenticationBackend):
         )
         if not auth_header or not auth_header.lower().startswith("bearer "):
             return None
-
+        ##得到bearer 后面的token
         token = auth_header[7:]  # Remove "Bearer " prefix
-
+        ## 调用验证器获取对应的验证信息
         # Validate the token with the verifier
         auth_info = await self.token_verifier.verify_token(token)
 
