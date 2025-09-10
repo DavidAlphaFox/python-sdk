@@ -48,7 +48,7 @@ class BearerAuthBackend(AuthenticationBackend):
 
         return AuthCredentials(auth_info.scopes), AuthenticatedUser(auth_info)
 
-
+## FastMCP的JWT验证会使用该中间件
 class RequireAuthMiddleware:
     """
     Middleware that requires a valid Bearer token in the Authorization header.
@@ -76,7 +76,7 @@ class RequireAuthMiddleware:
         self.resource_metadata_url = resource_metadata_url
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        auth_user = scope.get("user")
+        auth_user = scope.get("user") #得不到认证的user就结束流程
         if not isinstance(auth_user, AuthenticatedUser):
             await self._send_auth_error(
                 send, status_code=401, error="invalid_token", description="Authentication required"
